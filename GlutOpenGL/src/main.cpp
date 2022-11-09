@@ -15,35 +15,44 @@ void draw_pixel(int x, int y) {
 }
 
 void draw_line(int x1, int y1, int x2, int y2) {
-    int option = 0;
-    int quad = 0;
     if (x1 > x2) {
         swap(x1, x2);
         swap(y1, y2);
     }
 
-    if (y1 < y2) {    // 1 and 3 quadrant
-        if (x2 > y2)  // 1 and 5 octant
+    if (x1 == x2) {
+        if (y1 > y2) swap(y1, y2);
+        for (int i = y1; i <= y2; i++) draw_pixel(x1, i);
+        return;
+    } else if (y1 == y2) {
+        for (int i = x1; i <= x2; i++) draw_pixel(i, y1);
+        return;
+    }
+    int option = 0;
+
+    if (y1 < y2) {  // positive slope
+        if ((y2 - y1) <= (x2 - x1))
             option = 0;
-        else if (y2 > x2) {  // 2 and 6 octant
+        else if ((y2 - y1) > (x2 - x1)) {
             option = 1;
             swap(x1, y1);
             swap(x2, y2);
         }
     }
 
-    if (y2 < y1) {  // 2 and 4 quadrant
+    else if (y2 < y1) {  // negative slopes
         y1 = -y1;
         y2 = -y2;
-        if (x1 > y1) {
-            option = 2;  // 3 and 7 octant
+        if ((y2 - y1) > (x2 - x1)) {
+            option = 2;
             swap(x1, y1);
             swap(x2, y2);
-        } else if (y1 > x1) {
+        } else if ((y2 - y1) <= (x2 - x1)) {
             option = 3;
         }
     }
     vector<pair<int, int>> coords;
+
     int dx = x2 - x1;
     int dy = y2 - y1;
     int d = 2 * dy - dx;
@@ -64,6 +73,7 @@ void draw_line(int x1, int y1, int x2, int y2) {
         }
         x++;
         coords.emplace_back(x, y);
+        // cout << option << ' ' << x << ' ' << y << endl;
     }
     for (auto i: coords) {
         if (option == 0)
@@ -156,11 +166,46 @@ void draw_ellipse(int a, int b, int x1, int y1) {
     for (auto i: coords) { draw_pixel(i.first + x1, i.second + y1); }
 }
 
+void draw_pillar() {
+    // pillar lines
+    draw_line(700, 360, 700, 720);
+    draw_line(715, 360, 715, 720);
+    draw_line(730, 360, 730, 720);
+    draw_line(760, 360, 760, 720);
+    draw_line(790, 360, 790, 720);
+    draw_line(830, 360, 830, 720);
+    draw_line(870, 360, 870, 720);
+    draw_line(885, 360, 885, 720);
+    draw_line(900, 360, 900, 720);
+
+    // pillar bases
+    draw_line(680, 360, 920, 360);
+    draw_line(680, 360, 680, 350);
+    draw_line(920, 360, 920, 350);
+    draw_line(680, 350, 920, 350);
+
+    draw_line(670, 350, 930, 350);
+    draw_line(670, 350, 670, 340);
+    draw_line(930, 350, 930, 340);
+    draw_line(670, 340, 930, 340);
+
+    draw_line(665, 340, 935, 340);
+    draw_line(665, 340, 665, 300);
+    draw_line(935, 340, 935, 300);
+    draw_line(665, 300, 935, 300);
+}
+
+void draw_spear() {
+    draw_line(300, 720, 755, 595);
+    draw_line(280, 720, 750, 590);
+    draw_line(740, 580, 770, 610);
+
+    draw_line(740, 580, 800, 580);
+    draw_line(770, 610, 800, 580);
+}
 void myDisplay() {
-    draw_line(0, 0, 600, 500);
-    draw_line(400, 700, 300, 200);
-    draw_circle(50, 640, 360);
-    draw_ellipse(100, 50, 640, 360);
+    // draw_pillar();
+    draw_spear();
     glFlush();
 }
 
