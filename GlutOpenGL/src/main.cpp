@@ -8,8 +8,12 @@
 
 using namespace std;
 
+int scr_width = 1280;
+int scr_height = 720;
+
 void draw_pixel(int x, int y) {
     glBegin(GL_POINTS);
+    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
     glVertex2i(x, y);
     glEnd();
 }
@@ -203,28 +207,44 @@ void draw_spear() {
     draw_line(740, 580, 800, 580);
     draw_line(770, 610, 800, 580);
 }
+
+void draw_sword() {
+    draw_line(632, 295, 632, 220);
+    draw_line(648, 295, 648, 220);
+
+    draw_line(632, 220, 648, 220);
+
+    draw_line(632, 245, 648, 245);
+    draw_line(632, 270, 648, 270);
+
+    draw_ellipse(45, 5, 640, 300);
+    draw_circle(5, 640, 300);
+
+    draw_line(655, 305, 640, 650);
+    draw_line(625, 305, 640, 650);
+}
+
 void myDisplay() {
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+
+    draw_sword();
     // draw_pillar();
-    draw_spear();
+    // draw_spear();
+    glutSwapBuffers();
     glFlush();
 }
 
 int main(int argc, char** argv) {
-    int scr_width = 1280;
-    int scr_height = 720;
     glutInit(&argc, argv);
 
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize(scr_width, scr_height);
     glutInitWindowPosition(0, 0);
-
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glutCreateWindow("Shot 6A");
 
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0, scr_width, 0, scr_height);
-
     glutDisplayFunc(myDisplay);
     glutMainLoop();
 }
