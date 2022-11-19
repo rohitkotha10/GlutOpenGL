@@ -19,25 +19,26 @@ void draw_pixel(int x, int y) {
 }
 
 void draw_line(int x1, int y1, int x2, int y2) {
-    if (x1 > x2) {
+    if (x1 > x2) {  // make starting from left always
         swap(x1, x2);
         swap(y1, y2);
     }
 
+    // vertical line
     if (x1 == x2) {
         if (y1 > y2) swap(y1, y2);
         for (int i = y1; i <= y2; i++) draw_pixel(x1, i);
         return;
-    } else if (y1 == y2) {
+    } else if (y1 == y2) {  // horizontal line
         for (int i = x1; i <= x2; i++) draw_pixel(i, y1);
         return;
     }
-    int option = 0;
+    int option = 0; //for selcting which type of line
 
     if (y1 < y2) {  // positive slope
         if ((y2 - y1) <= (x2 - x1))
             option = 0;
-        else if ((y2 - y1) > (x2 - x1)) {
+        else if ((y2 - y1) > (x2 - x1)) {  // increment y instead of x
             option = 1;
             swap(x1, y1);
             swap(x2, y2);
@@ -51,12 +52,15 @@ void draw_line(int x1, int y1, int x2, int y2) {
             option = 2;
             swap(x1, y1);
             swap(x2, y2);
-        } else if ((y2 - y1) <= (x2 - x1)) {
+        } else if ((y2 - y1) <= (x2 - x1)) {  // increment y instead of x
             option = 3;
         }
     }
-    vector<pair<int, int>> coords;
 
+    // function starts here
+    // from class slides
+
+    vector<pair<int, int>> coords;
     int dx = x2 - x1;
     int dy = y2 - y1;
     int d = 2 * dy - dx;
@@ -91,6 +95,7 @@ void draw_line(int x1, int y1, int x2, int y2) {
     }
 }
 
+// 8 way symmetry
 void draw_8way(int x, int y, vector<pair<int, int>>& coords) {
     coords.emplace_back(x, y);
     coords.emplace_back(-x, y);
@@ -105,6 +110,9 @@ void draw_8way(int x, int y, vector<pair<int, int>>& coords) {
 }
 
 void draw_circle(int radius, int x1, int y1) {
+    // function starts here
+    // function from class slides
+
     vector<pair<int, int>> coords;
     int x = 0;
     int y = radius;
@@ -131,6 +139,7 @@ void draw_circle(int radius, int x1, int y1) {
     for (auto i: coords) { draw_pixel(i.first + x1, i.second + y1); }
 }
 
+// 4 way symmetry
 void draw_4way(int x, int y, vector<pair<int, int>>& coords) {
     coords.emplace_back(x, y);
     coords.emplace_back(-x, y);
@@ -139,6 +148,9 @@ void draw_4way(int x, int y, vector<pair<int, int>>& coords) {
 }
 
 void draw_ellipse(int a, int b, int x1, int y1) {
+    // function starts here
+    // function from class slides
+
     vector<pair<int, int>> coords;
     double d2;
     int x = 0;
@@ -200,32 +212,37 @@ void draw_pillar() {
 }
 
 void draw_spear() {
+    // spear base
     draw_line(300, 720, 755, 595);
     draw_line(280, 720, 750, 590);
-    draw_line(740, 580, 770, 610);
 
+    // spear head
+    draw_line(740, 580, 770, 610);
     draw_line(740, 580, 800, 580);
     draw_line(770, 610, 800, 580);
 }
 
 void draw_sword() {
+    // sword handle
     draw_line(632, 295, 632, 220);
     draw_line(648, 295, 648, 220);
 
+    // sword handle horizontal
     draw_line(632, 220, 648, 220);
-
     draw_line(632, 245, 648, 245);
     draw_line(632, 270, 648, 270);
 
+    // sword join
     draw_ellipse(45, 5, 640, 300);
     draw_circle(5, 640, 300);
 
+    // sword
     draw_line(655, 305, 640, 650);
     draw_line(625, 305, 640, 650);
 }
 
 void myDisplay() {
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);  // clear screen color every frame
 
     draw_sword();
     // draw_pillar();
@@ -245,6 +262,6 @@ int main(int argc, char** argv) {
 
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0, scr_width, 0, scr_height);
-    glutDisplayFunc(myDisplay);
+    glutDisplayFunc(myDisplay);  // the main loop
     glutMainLoop();
 }
